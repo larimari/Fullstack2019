@@ -14,3 +14,8 @@ Kurrsin Full Stack -websovelluskehitys 2019 osien 0 ja 1 tehtävät.
 - Tehtävät [1.6-1.11](https://github.com/larimari/Fullstack2019/tree/master/Osa1/unicafe)
 
 - Tehtävä [1.12](https://github.com/larimari/Fullstack2019/tree/master/Osa1/anekdootit)
+
+## Osa 2
+- Kurssitiedot tehtävät [2.1-2.5](https://github.com/larimari/Fullstack2019/tree/master/kurssitiedot)
+
+- Puhelinluettelo tehtävät [2.6-2.11 ja 2.15-2.20](https://github.com/larimari/Fullstack2019/tree/master/puhelinluettelo)
