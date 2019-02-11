@@ -49,7 +49,7 @@ const App = () => {
             }
         })
 
-        const human = persons.filter(h => h.name === newName)
+        const human = persons.find(h => h.name.toLowerCase() === newName.toLowerCase())
 
 
         if (sisaltaako === false) {
@@ -65,7 +65,6 @@ const App = () => {
                         setPersons(persons.map(x => x.id !== changedPerson.id ? x : fix))
                         console.log(changedPerson.name)
                     })
-                console.log('done')
                     .catch(error => {
                         setNotification(
                             {
