@@ -4,14 +4,16 @@ const mongoUrl = process.env.MONGODB_URI
 
 console.log('connecting to', mongoUrl)
 
-  const blogSchema = mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-  })
-
-
+const blogSchema = mongoose.Schema({
+  title: String,
+  author: String,
+  url: String,
+  likes: Number,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
+})
 
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {

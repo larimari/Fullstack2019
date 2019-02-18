@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-        "title": "toinen",
-        "author": "joku muu",
-        "url": "www.blog.fi",
-        "likes": 1
+        "title": "Opi jo",
+        "author": "Mina",
+        "url": "joku fiksu paikka",
+        "likes": 2,
+        "userId": "5c6b228d03a0d63d7e23b2b7"
 }
