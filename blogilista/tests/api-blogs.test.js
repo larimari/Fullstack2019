@@ -55,7 +55,7 @@ describe('blogs testing', () => {
         expect(lopuksi.length).toBe(beginning.length + 1)
     })
 
-    test('if no like it is 0', async () => {
+    test.skip('if no like it is 0', async () => {
         const beginning = await helper.blogsInDb()
         const newBlog = {
             title: 'Pitää taas keksiä joku',

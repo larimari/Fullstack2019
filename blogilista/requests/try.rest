@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhcmltYXJpIiwiaWQiOiI1YzZlN2I0NmRhOWYxYTAyYTNmODQ0YzgiLCJpYXQiOjE1NTA3NDU0MjZ9.Ai1dHNtt_kfuNOKEquvzaXliMtxsyEQi3MxkUuu5Ao4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhcmltYXJpIiwiaWQiOiI1YzZlOGUwOWU1ZTZlZTA2MzdlYTRjNDMiLCJpYXQiOjE1NTA3NDkxOTh9.VH7kP56VCh_dG5It0GeBx0JihRE9PuxL0EPdUvXE4W8
 
 {
         "title": "Opi jo",

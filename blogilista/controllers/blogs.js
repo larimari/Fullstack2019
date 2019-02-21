@@ -12,26 +12,23 @@ blogRouter.get('/', async (request, response) => {
         })
 })
 
-const getTokenFrom = request => {
-    const authorization = request.get('authorization')
-    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-      return authorization.substring(7)
-    }
-    return null
-  }
-
 blogRouter.post('/', async (request, response, next) => {
     const blog = request.body
-    const token = getTokenFrom(request)
-    
+
+    console.log('token', request.token)
+
     try {
-        const decodedToken = jwt.verify(token, process.env.SECRET)
-        if (!token || !decodedToken.id) {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        if (!request.token || !decodedToken.id) {
             return response.status(401).json({ error: 'token missing or invalid' })
         }
 
         const user = await User.findById(decodedToken.id)
         console.log('user', user)
+
+        if (!user) {
+            return response.status(400).json({error: 'user not found'})
+        }
 
         if (!blog.title || !blog.url) {
             return response.status(400).json({ error: 'title tai url puuttuu' })
@@ -55,29 +52,35 @@ blogRouter.post('/', async (request, response, next) => {
 })
 
 blogRouter.delete('/:id', async (request, response, next) => {
-    try {
+    if (!request.token) {
+        return response.status(401).json({ error: 'token missing' })
+    }
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+
+    if (blog.user.toString() === decodedToken.id) {
         await Blog.findByIdAndRemove(request.params.id)
         response.status(204).end()
-    } catch (exception) {
-        next(exception)
+    } else {
+        response.status(404).end()
     }
 })
 
 blogRouter.put('/:id', async (request, response) => {
-    const body = request.body
+    const { author, title, url, likes } = request.body
 
-    try {
-        const blog = await Blog.findById(request.params.id)
-        if (blog) {
-            blog.likes = body.likes
-            const savedBlog = await blog.save()
-            response.json(savedBlog.toJSON())
-        } else {
-            response.status(404).end()
-        }
-    } catch (exeption) {
-        next(exeption)
+    const blog = {
+        author, title, url, likes,
     }
+
+    const updatedNote = await Blog
+        .findByIdAndUpdate(request.params.id, blog, { new: true })
+
+    response.json(updatedNote.toJSON())
 
 })
 
