@@ -5,11 +5,20 @@ const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog
-        .find({}).populate('user', { username: 1, name: 1 })
+        .find({})
+        .populate('user', { username: 1, name: 1 })
         .then(blogs => {
             response.json(blogs)
         })
 })
+
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      return authorization.substring(7)
+    }
+    return null
+  }
 
 blogRouter.post('/', async (request, response, next) => {
     const blog = request.body
@@ -22,6 +31,7 @@ blogRouter.post('/', async (request, response, next) => {
         }
 
         const user = await User.findById(decodedToken.id)
+        console.log('user', user)
 
         if (!blog.title || !blog.url) {
             return response.status(400).json({ error: 'title tai url puuttuu' })

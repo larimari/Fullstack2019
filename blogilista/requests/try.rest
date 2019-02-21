@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhcmltYXJpIiwiaWQiOiI1YzZlN2I0NmRhOWYxYTAyYTNmODQ0YzgiLCJpYXQiOjE1NTA3NDU0MjZ9.Ai1dHNtt_kfuNOKEquvzaXliMtxsyEQi3MxkUuu5Ao4
 
 {
         "title": "Opi jo",
         "author": "Mina",
         "url": "joku fiksu paikka",
         "likes": 2,
-        "userId": "5c6b228d03a0d63d7e23b2b7"
+        "userId": "5c6e7b46da9f1a02a3f844c8"
 }
