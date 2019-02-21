@@ -6,14 +6,13 @@ const api = supertest(app)
 
 const User = require('../models/users')
 
-//...
-
-describe('when there is initially one user at db', async () => {
-    beforeEach(async () => {
+beforeEach(async () => {
         await User.remove({})
         const user = new User({ username: 'root', password: 'sekret' })
         await user.save()
     })
+
+describe('when there is initially one user at db', async () => {
 
     test('creation succeeds with a fresh username', async () => {
         const usersAtStart = await helper.usersInDb()
