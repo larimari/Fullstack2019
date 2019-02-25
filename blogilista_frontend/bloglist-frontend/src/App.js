@@ -14,8 +14,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const username = useField('text')
   const password = useField('password')
-  const title = useField('title')
-  const author = useField('author')
+  const title = useField('text')
+  const author = useField('text')
   const url = useField('url')
 
 
