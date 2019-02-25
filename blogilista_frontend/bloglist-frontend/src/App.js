@@ -5,17 +5,18 @@ import loginService from './services/login'
 import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
 import Togglable from './components/togglable'
+import  { useField } from './hooks'
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [newMessage, setMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const username = useField('text')
+  const password = useField('password')
+  const title = useField('title')
+  const author = useField('author')
+  const url = useField('url')
 
 
   useEffect(() => {
@@ -37,7 +38,8 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({
-        username, password,
+        username: username.value,
+        password: password.value
       })
 
       window.localStorage.setItem(
@@ -46,8 +48,9 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      password.props.reset()
+      username.props.reset()
+
       setMessage('Kirjautuminen onnistui')
       setTimeout(() => {
         setMessage(null)
@@ -64,8 +67,6 @@ const App = () => {
       <LoginForm
         username={username}
         password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
         handleSubmit={handleLogin}
       />
     </Togglable>
@@ -74,13 +75,10 @@ const App = () => {
   const blogForm = () => (
     <Togglable buttonLabel='Create new blog'>
       <BlogForm
-        newAuthor={newAuthor}
-        newTitle={newTitle}
-        newUrl={newUrl}
+        author={author}
+        title={title}
+        url={url}
         addBlog={addBlog}
-        handleAuthorChange={handleAuthorChange}
-        handleTitleChange={handleTitleChange}
-        handleUrlChange={handleUrlChange}
       />
     </Togglable>
   )
@@ -92,17 +90,17 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
+      title: title.value,
+      author: author.value,
+      url: url.value,
       likes: 0
     }
     blogService
       .create(blogObject).then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setNewAuthor('')
-        setNewTitle('')
-        setNewUrl('')
+        author.props.reset()
+        title.props.reset()
+        url.props.reset()
         setMessage('Blogin lisääminen onnistui')
         setTimeout(() => {
           setMessage(null)
@@ -149,7 +147,7 @@ const App = () => {
     blogService
       .remove(blogObject)
       .then(
-        setBlogs(blogs.filter((allBlogs => allBlogs.id !== blog.id))
+        setBlogs(blogs.filter(allBlogs => allBlogs.id !== blog.id)
         )
       )
 
@@ -158,16 +156,6 @@ const App = () => {
       setMessage(null)
     }, 5000)
 
-  }
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
   }
 
   const Notification = () => {

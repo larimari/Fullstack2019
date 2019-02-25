@@ -22,18 +22,22 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
 
   let deleteVisible = false
 
-  if (user === null) {
-    deleteVisible = false
+  if (blog.user.username === user.username) {
+    deleteVisible = true
   } else {
-
-    if (blog.user === null) {
-      deleteVisible = false
-    } else if (blog.user.username === user.username) {
-      deleteVisible = true
-    } else {
-      deleteVisible = false
-    }
+    deleteVisible = false
   }
+  // if (user === null) {
+  //   deleteVisible = false
+  // } else {
+  //   if (blog.user === null) {
+  //     deleteVisible = false
+  //   } else if (blog.user.username === user.username) {
+  //     deleteVisible = true
+  //   } else {
+  //     deleteVisible = false
+  //   }
+  // }
 
   const showWhenUserOwner = {
     display: deleteVisible ? '' : 'none',
