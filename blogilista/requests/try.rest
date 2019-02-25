@@ -1,11 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhcmltYXJpIiwiaWQiOiI1YzZlOGUwOWU1ZTZlZTA2MzdlYTRjNDMiLCJpYXQiOjE1NTA3NDkxOTh9.VH7kP56VCh_dG5It0GeBx0JihRE9PuxL0EPdUvXE4W8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im15bXkiLCJpZCI6IjVjNmZkMWUwYzVjMjhlMDQ3MmJmMGM5YyIsImlhdCI6MTU1MDgzNTY3NX0.iHZBm4gDL81DwXUWJ6xCtKlsVOhLwhcZVu71I0NzRtA
 
 {
-        "title": "Opi jo",
-        "author": "Mina",
-        "url": "joku fiksu paikka",
-        "likes": 2,
-        "userId": "5c6e7b46da9f1a02a3f844c8"
+        "title": "React patterns",
+        "author": "Michael Chan",
+        "url": "https://reactpatterns.com/",
+        "likes": 7,
+        "userId": "5c6fd1e0c5c28e0472bf0c9c"
 }

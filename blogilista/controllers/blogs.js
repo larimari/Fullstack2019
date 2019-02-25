@@ -27,7 +27,7 @@ blogRouter.post('/', async (request, response, next) => {
         console.log('user', user)
 
         if (!user) {
-            return response.status(400).json({error: 'user not found'})
+            return response.status(400).json({ error: 'user not found' })
         }
 
         if (!blog.title || !blog.url) {
@@ -75,13 +75,28 @@ blogRouter.put('/:id', async (request, response) => {
 
     const blog = {
         author, title, url, likes,
-    }
-
-    const updatedNote = await Blog
+      }
+    
+      const updatedBlog = await Blog
         .findByIdAndUpdate(request.params.id, blog, { new: true })
+          
+      response.json(updatedBlog.toJSON())
+    })
+    
 
-    response.json(updatedNote.toJSON())
+//     try {
+//         const blog = await Blog.findById(request.params.id)
+//         if (blog) {
+//             blog.likes = likes
+//             const savedBlog = await blog.save()
+//             response.json(savedBlog.toJSON())
+//         } else {
+//             response.status(404).end()
+//         }
+//     } catch (exeption) {
+//         next(exeption)
+//     }
+// })
 
-})
 
 module.exports = blogRouter
