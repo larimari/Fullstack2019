@@ -9,9 +9,9 @@ const App = ({ store }) => {
   return (
     <div>
       <Notification store={store} />
-      <Filter store={store} />
-      <AnecdoteList store={store} />
-      <AnecdoteForm store={store} />
+      <Filter />
+      <AnecdoteList />
+      <AnecdoteForm />
     </div>
   )
 }
