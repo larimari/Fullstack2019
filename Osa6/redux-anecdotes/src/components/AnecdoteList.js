@@ -1,22 +1,20 @@
 import React from 'react'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
-import { createNotification } from '../reducers/notificationReducer'
+import { setNotification, clearNotification } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
 
-const AnecdoteList = ({ anecdotes, voteAnecdote, createNotification }) => {
+const AnecdoteList = (props) => {
 
-
-  const vote = id => {
-    voteAnecdote(id)
-    createNotification('Vote lisätty')
-
-    setTimeout(() => createNotification(''), 5000)
+  const vote = (id) => {
+    const voted = props.anecdotesToShow.find(a => a.id === id)
+    props.voteAnecdote(voted)
+    props.setNotification(`you voted '${voted.content}'`, 10)
   }
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote => (
+      {props.anecdotesToShow.map(anecdote => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -29,23 +27,64 @@ const AnecdoteList = ({ anecdotes, voteAnecdote, createNotification }) => {
   )
 }
 
-const anecdotesToShow = state => {
-  return state.anecdotes
-    .filter(s => s.content.includes(state.filter))
-    .sort(function(a, b) {
-      return b.likes - a.likes
-    })
-}
+const mapStateToProps = (state) => {
+  const anecdotesToShow = state.filter.length > 0 ?
+    state.anecdotes.filter(a => a.content.includes(state.filter)) :
+    state.anecdotes
 
-const mapStateToProps = state => {
   return {
-    anecdotes: anecdotesToShow(state)
+    anecdotesToShow
   }
 }
 
 const mapDispatchToProps = {
   voteAnecdote,
-  createNotification
+  clearNotification, 
+  setNotification
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
+
+
+/* import React from 'react'
+import { connect } from 'react-redux'
+import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { setNotification, clearNotification } from '../reducers/notificationReducer'
+
+const AnecdoteList = (props) => {
+  const vote = (id) => {
+    const voted = props.anecdotesToShow.find(a => a.id === id)
+    props.voteAnecdote(voted)
+    props.setNotification(`you voted '${voted.content}'`, 10)
+  }
+
+  return (
+    <div>
+      {props.anecdotesToShow.map(anecdote =>
+        <div key={anecdote.id}>
+          <div>
+            {anecdote.content}
+          </div>
+          <div>
+            has {anecdote.votes}
+            <button onClick={() => vote(anecdote.id)}>vote</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const mapStateToProps = (state) => {
+  const anecdotesToShow = state.filter.length > 0 ?
+    state.anecdotes.filter(a => a.content.includes(state.filter)) :
+    state.anecdotes
+
+  return {
+    anecdotesToShow
+  }
+}
+
+export default connect(mapStateToProps, {
+  setNotification, clearNotification, voteAnecdote 
+})(AnecdoteList) */

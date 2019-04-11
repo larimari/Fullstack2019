@@ -1,11 +1,8 @@
 const reducer = (state = '', action) => {
 
-  console.log('reducer state now: ', state)
-  console.log('action', action)
-
     switch (action.type) {
-        case 'FILTER':
-            return action.data
+        case 'SET_FILTER':
+            return action.filter
 
         default: return state
     }
@@ -14,9 +11,30 @@ const reducer = (state = '', action) => {
 
 export const setFilter = (filter) => {
     return {
-        type: 'FILTER',
-        data: filter 
+        type: 'SET_FILTER',
+        filter 
     }
 }
 
 export default reducer
+
+
+
+
+/* const filterReducer = (state = '', action) => {
+  switch (action.type) {
+    case 'SET_FILTER':
+      return action.filter
+    default:
+      return state
+  }
+}
+
+export const setFilter = filter => {
+  return {
+    type: 'SET_FILTER',
+    filter,
+  }
+}
+
+export default filterReducer */
