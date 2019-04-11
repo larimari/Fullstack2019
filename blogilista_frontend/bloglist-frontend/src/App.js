@@ -5,24 +5,25 @@ import loginService from './services/login'
 import LoginForm from './components/loginForm'
 import BlogForm from './components/blogForm'
 import Togglable from './components/togglable'
-import  { useField } from './hooks'
+import { useField } from './hooks'
+import Notification from './components/Notification'
+import { connect } from 'react-redux'
+import {
+  setNotification,
+  clearNotification
+} from './reducers/notificationReducer'
 
-
-const App = () => {
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
-  const [newMessage, setMessage] = useState(null)
   const [user, setUser] = useState(null)
   const username = useField('text')
   const password = useField('password')
   const title = useField('text')
   const author = useField('text')
-  const url = useField('url')
-
+  const url = useField('text')
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
+  const handleLogin = async event => {
     event.preventDefault()
     try {
       const user = await loginService.login({
@@ -42,28 +43,21 @@ const App = () => {
         password: password.value
       })
 
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
 
       blogService.setToken(user.token)
       setUser(user)
       password.props.reset()
       username.props.reset()
 
-      setMessage('Kirjautuminen onnistui')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      props.setNotification('Kirjautuminen onnistui', 5)
+
     } catch (exception) {
-      setMessage('Käyttäjätunnus tai salasana virheellinen')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
+      props.setNotification('Käyttäjätunnus tai salasana virheellinen', 5)
     }
   }
   const loginForm = () => (
-    <Togglable buttonLabel='login'>
+    <Togglable buttonLabel="login">
       <LoginForm
         username={username}
         password={password}
@@ -73,13 +67,8 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <Togglable buttonLabel='Create new blog'>
-      <BlogForm
-        author={author}
-        title={title}
-        url={url}
-        addBlog={addBlog}
-      />
+    <Togglable buttonLabel="Create new blog">
+      <BlogForm author={author} title={title} url={url} addBlog={addBlog} />
     </Togglable>
   )
 
@@ -87,7 +76,7 @@ const App = () => {
     setUser(null)
     window.localStorage.clear()
   }
-  const addBlog = (event) => {
+  const addBlog = event => {
     event.preventDefault()
     const blogObject = {
       title: title.value,
@@ -95,20 +84,16 @@ const App = () => {
       url: url.value,
       likes: 0
     }
-    blogService
-      .create(blogObject).then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        author.props.reset()
-        title.props.reset()
-        url.props.reset()
-        setMessage('Blogin lisääminen onnistui')
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
-      })
+    blogService.create(blogObject).then(returnedBlog => {
+      setBlogs(blogs.concat(returnedBlog))
+      author.props.reset()
+      title.props.reset()
+      url.props.reset()
+    })
+    props.setNotification('Blogin lisääminen onnistui', 5)
   }
 
-  const addLike = (blog) => {
+  const addLike = blog => {
     const blogObject = {
       title: blog.title,
       author: blog.author,
@@ -117,25 +102,21 @@ const App = () => {
       id: blog.id
     }
 
-    blogService
-      .update(blogObject)
-      .then(allBlogs => {
-        setBlogs(blogs.map(b => b.id === blog.id ? allBlogs : b))
-      })
+    blogService.update(blogObject).then(allBlogs => {
+      setBlogs(blogs.map(b => (b.id === blog.id ? allBlogs : b)))
+    })
 
-    setMessage(`Blogiin "${blogObject.title}" on lisätty tykkäys`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
+    props.setNotification(`Blogiin "${blogObject.title}" on lisätty tykkäys`, 5)
+
   }
-  const sortBlogs = (blogs) => {
-    blogs.sort(function (a, b) {
+  const sortBlogs = blogs => {
+    blogs.sort(function(a, b) {
       return b.likes - a.likes
     })
     return blogs
   }
 
-  const deleteBlog = (blog) => {
+  const deleteBlog = blog => {
     const blogObject = {
       title: blog.title,
       author: blog.author,
@@ -146,53 +127,43 @@ const App = () => {
 
     blogService
       .remove(blogObject)
-      .then(
-        setBlogs(blogs.filter(allBlogs => allBlogs.id !== blog.id)
-        )
-      )
+      .then(setBlogs(blogs.filter(allBlogs => allBlogs.id !== blog.id)))
 
-    setMessage(`Blogi "${blogObject.title}" on poistettu`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-
+    props.setNotification(`Blogi "${blogObject.title}" on poistettu`, 5)
   }
-
-  const Notification = () => {
-    if (newMessage === null) {
-      return null
-    } else {
-      return (
-        <div>
-          {newMessage}
-        </div>
-      )
-    }
-  }
-
 
   return (
     <div>
-
-      <Notification message={newMessage} />
+      <Notification />
 
       <h2>Kirjaudu</h2>
 
-      {user === null ?
-        loginForm() :
+      {user === null ? (
+        loginForm()
+      ) : (
         <div>
           <p>{user.name} logged in</p>
           <button onClick={() => logout()}>logout</button>
           {blogForm()}
           <h2>Blogs</h2>
-          {sortBlogs(blogs).map(blog =>
-            <Blog key={blog.id} blog={blog} addLike={addLike} user={user} deleteBlog={deleteBlog} />)}
+          {sortBlogs(blogs).map(blog => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addLike={addLike}
+              user={user}
+              deleteBlog={deleteBlog}
+            />
+          ))}
         </div>
-      }
-
+      )}
     </div>
   )
-
 }
 
-export default App
+const mapDispatchToProps = {
+  setNotification,
+  clearNotification
+}
+
+export default connect(null, mapDispatchToProps)(App)
