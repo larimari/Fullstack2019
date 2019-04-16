@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Table } from 'semantic-ui-react'
 
 const Blog = ({ blog, addLike, user, deleteBlog }) => {
   const [informationVisible, setInformationVisible] = useState(false)
@@ -27,17 +28,6 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
   } else {
     deleteVisible = false
   }
-  // if (user === null) {
-  //   deleteVisible = false
-  // } else {
-  //   if (blog.user === null) {
-  //     deleteVisible = false
-  //   } else if (blog.user.username === user.username) {
-  //     deleteVisible = true
-  //   } else {
-  //     deleteVisible = false
-  //   }
-  // }
 
   const showWhenUserOwner = {
     display: deleteVisible ? '' : 'none',

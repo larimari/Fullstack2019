@@ -14,6 +14,7 @@ import {
   clearNotification
 } from './reducers/notificationReducer'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Container, Table, Button } from 'semantic-ui-react'
 
 const BlogList = props => {
   const title = useField('text')
@@ -159,7 +160,7 @@ const App = props => {
   }
 
   return (
-    <div>
+    <Container>
       <Notification />
 
       <h2>Kirjaudu</h2>
@@ -169,13 +170,13 @@ const App = props => {
       ) : (
         <div>
           <p>{user.name} logged in</p>
-          <button onClick={() => logout()}>logout</button>
+          <Button onClick={() => logout()}>logout</Button>
           {users.length > 0 && <Users users={users} />}
 
-          <Menu blogs={blogs} users={users} user={user} setBlogs={setBlogs} />
+          <Menu blogs={blogs} users={users} user={user} setBlogs={setBlogs} setNotification={setNotification}/>
         </div>
       )}
-    </div>
+    </Container>
   )
 }
 
@@ -184,28 +185,27 @@ const Users = props => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>
+      <Table striped celled>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>
               <Link to="/">Kaikki blogit</Link>
-            </td>
-            <td>
+            </Table.Cell>
+            <Table.Cell>
               <b>Blogs</b>
-            </td>
-          </tr>
+            </Table.Cell>
+          </Table.Row>
           {props.users.map(user => (
-            <tr key={user.id}>
-              <td>
+            <Table.Row key={user.id}>
+              <Table.Cell>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>{user.blogs.length}</td>
-            </tr>
+              </Table.Cell>
+              <Table.Cell>{user.blogs.length}</Table.Cell>
+            </Table.Row>
           ))}
-
           {/* <td>{props.users.reduce((acc,user) => acc + user.blogs.length, 0)}</td> */}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table>
     </div>
   )
 }
