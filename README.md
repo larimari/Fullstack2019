@@ -1,5 +1,5 @@
 # Fullstack2019
-Kurrsin Full Stack -websovelluskehitys 2019 osien 0, 1, 2, 4 ja 5 tehtävät.
+Kurrsin Full Stack -websovelluskehitys 2019 osien 0-2 sekä 4-8 tehtävät.
 
 ## Osa 0
 - Tehtävä [0.4](https://github.com/larimari/Fullstack2019/blob/master/t0_4.png)
@@ -35,3 +35,5 @@ Kurrsin Full Stack -websovelluskehitys 2019 osien 0, 1, 2, 4 ja 5 tehtävät.
 ## Osa 7
 - Tehtävät [7.1-7.3](https://github.com/larimari/Fullstack2019/tree/master/Osa7)
 - Loput tehtävät ovat osan 5 [blogilistan](https://github.com/larimari/Fullstack2019/tree/master/blogilista_frontend/bloglist-frontend) muokkauksia
+
+## Osa 8
