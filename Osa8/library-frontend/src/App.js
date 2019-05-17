@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Edit from './components/Edit'
 import { Query, Mutation, ApolloConsumer } from 'react-apollo'
 import { gql } from 'apollo-boost'
 
@@ -43,33 +44,25 @@ const CREATE_BOOK = gql`
   }
 `
 const EDIT_AUTHOR = gql`
-  mutation editAuthor(
-    $name: String!
-    $born: Int!
-  ){
-    addBorn(
-      name: $name
-      born: $born
-    ) {
-      name 
+  mutation editAuthor($name: String!, $born: Int!) {
+    editAuthor(name: $name, born: $born) {
+      name
       born
-      bookCount
     }
   }
 `
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  
+
   return (
     <div>
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
+        <button onClick={() => setPage('edit')}>edit author</button>
       </div>
-
-      {/* <NewBook show={page === 'add'} /> */}
 
       <Query query={ALL_AUTHORS}>
         {result => {
@@ -81,7 +74,7 @@ const App = () => {
         }}
       </Query>
 
-      <Query query={ALL_BOOKS}>
+      <Query query={ALL_BOOKS} pollInterval={2000}>
         {result => {
           if (result.loading) {
             return <div>loading...</div>
@@ -90,10 +83,17 @@ const App = () => {
           }
         }}
       </Query>
+
       <Mutation
         mutation={CREATE_BOOK}
-        refetchQueries={[{ query: ALL_AUTHORS, ALL_BOOKS }]}>
+        refetchQueries={[{ query: ALL_AUTHORS }]}>
         {addBook => <NewBook show={page === 'add'} addBook={addBook} />}
+      </Mutation>
+
+      <Mutation
+        mutation={EDIT_AUTHOR}
+        refetchQueries={[{ query: ALL_AUTHORS }]}>
+        {editAuthor => <Edit show={page === 'edit'} editAuthor={editAuthor} />}
       </Mutation>
     </div>
   )
