@@ -37,3 +37,4 @@ Kurrsin Full Stack -websovelluskehitys 2019 osien 0-2 sekä 4-8 tehtävät.
 - Loput tehtävät ovat osan 5 [blogilistan](https://github.com/larimari/Fullstack2019/tree/master/blogilista_frontend/bloglist-frontend) muokkauksia
 
 ## Osa 8
+- Tehtävät [library](https://github.com/larimari/Fullstack2019/tree/master/Osa8)
