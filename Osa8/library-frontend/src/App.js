@@ -20,7 +20,9 @@ const ALL_BOOKS = gql`
     allBooks {
       title
       published
-      author
+      author{
+        name
+      }
     }
   }
 `
@@ -29,7 +31,7 @@ const CREATE_BOOK = gql`
     $title: String!
     $author: String!
     $published: Int!
-    $genres: [String]
+    $genres: [String!]!
   ) {
     addBook(
       title: $title
@@ -38,8 +40,12 @@ const CREATE_BOOK = gql`
       genres: $genres
     ) {
       title
-      author
+      author {
+        name
+      }
       published
+      genres
+      id
     }
   }
 `
@@ -48,6 +54,7 @@ const EDIT_AUTHOR = gql`
     editAuthor(name: $name, born: $born) {
       name
       born
+      bookCount
     }
   }
 `
