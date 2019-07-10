@@ -3,7 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Edit from './components/Edit'
-import { Query, Mutation, ApolloConsumer } from 'react-apollo'
+import { useQuery, useMutation} from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 const ALL_AUTHORS = gql`
@@ -62,6 +62,27 @@ const EDIT_AUTHOR = gql`
 const App = () => {
   const [page, setPage] = useState('authors')
 
+  const [errorMessage, setErrorMessage] = useState(null)
+  
+    const handleError = (error) => {
+      console.log(error.graphQLErrors[0].message)
+      setErrorMessage(error.graphQLErrors[0].message)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 10000)
+    }
+
+  const authors = useQuery(ALL_AUTHORS)
+  const books = useQuery(ALL_BOOKS)
+  const addBook = useMutation(CREATE_BOOK, {
+    onError: handleError,
+    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }]
+  })
+  const editAuthor = useMutation(EDIT_AUTHOR, {
+    onError: handleError,
+    refetchQueries: [{ query: ALL_AUTHORS }]
+  })
+
   return (
     <div>
       <div>
@@ -71,37 +92,31 @@ const App = () => {
         <button onClick={() => setPage('edit')}>edit author</button>
       </div>
 
-      <Query query={ALL_AUTHORS}>
-        {result => {
-          if (result.loading) {
-            return <div>loading...</div>
-          } else {
-            return <Authors result={result} show={page === 'authors'} />
-          }
-        }}
-      </Query>
+      <div>
+        {errorMessage &&
+          <div style={{ color: 'red' }}>
+            {errorMessage}
+          </div>
+        }
+      </div>
 
-      <Query query={ALL_BOOKS} pollInterval={2000}>
-        {result => {
-          if (result.loading) {
-            return <div>loading...</div>
-          } else {
-            return <Books result={result} show={page === 'books'} />
-          }
-        }}
-      </Query>
 
-      <Mutation
-        mutation={CREATE_BOOK}
-        refetchQueries={[{ query: ALL_AUTHORS }]}>
-        {addBook => <NewBook show={page === 'add'} addBook={addBook} />}
-      </Mutation>
-
-      <Mutation
-        mutation={EDIT_AUTHOR}
-        refetchQueries={[{ query: ALL_AUTHORS }]}>
-        {editAuthor => <Edit show={page === 'edit'} editAuthor={editAuthor} />}
-      </Mutation>
+      <Authors
+        show={page === 'authors'}
+        authors={authors}
+      />
+      <Books
+        show={page === 'books'}
+        books={books}
+      />
+      <NewBook
+        show={page === 'add'}
+        addBook={addBook}
+      />
+      <Edit
+        show={page === 'edit'}
+        editAuthor={editAuthor}
+      />
     </div>
   )
 }
