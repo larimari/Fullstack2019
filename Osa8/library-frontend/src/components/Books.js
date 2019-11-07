@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Books = (props) => {
   if (!props.show) {
     return null
   }
+  
+  console.log('booksin propsit', props)
 
-  if (props.books.loading) {
+  const [bookState, setBookState] = useState([])
+
+  const allBooks = props.result.data.allBooks
+  const books = bookState.length < 1 ? props.result.data.allBooks : bookState
+
+  if (props.result.loading) {
     return <div>loading...</div>
   }
-
-  const books = props.result.data.allBooks
 
   return (
     <div>
@@ -26,13 +31,14 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books.map(a =>
-            <tr key={a.title}>
+          {books.map(a => {
+            const author = a.author ? a.author : { name: '' }
+            return (<tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
-          )}
+          )})}
         </tbody>
       </table>
     </div>
