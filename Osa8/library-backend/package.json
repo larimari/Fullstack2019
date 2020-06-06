@@ -9,7 +9,7 @@
   "author": "Maria Larionova",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.4.8",
+    "apollo-server": "^2.14.2",
     "graphql": "^14.2.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.4",
